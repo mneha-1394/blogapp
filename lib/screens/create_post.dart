@@ -2,7 +2,7 @@ import 'package:blog_minimal/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
 class CreatePost extends StatelessWidget {
-  const CreatePost({Key key}) : super(key: key);
+  const CreatePost({Key ?key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class CreatePost extends StatelessWidget {
         iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Create Post',
           style: TextStyle(color: Colors.black),
         ),
@@ -38,36 +38,36 @@ class CreatePost extends StatelessWidget {
                     child: Ink(
                       width: size.width * 0.8,
                       height: size.height * 0.2,
-                      child: Center(child: Text('Select Image')),
+                      child: const Center(child: Text('Select Image')),
                     ),
                   ),
                 ),
               ),
               SizedBox(height: size.height * 0.025),
-              Text(
+              const Text(
                 'Title',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: size.height * 0.005),
-              CustomTextField(hint: 'Enter Title'),
+              const CustomTextField(hint: 'Enter Title'),
               SizedBox(height: size.height * 0.03),
-              Text(
+              const Text(
                 'Description',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: size.height * 0.005),
-              CustomTextField(hint: 'Enter Description'),
+              const CustomTextField(hint: 'Enter Description'),
               SizedBox(height: size.height * 0.02),
               Align(
-                child: Container(
+                child: SizedBox(
                     width: size.width * 0.5,
                     height: size.height * 0.06,
                     child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Color(0xFFFFD810))),
+                                MaterialStateProperty.all(const Color(0xFFFFD810))),
                         onPressed: () => null,
-                        child: Text('Create Post'))),
+                        child: const Text('Create Post'))),
               )
             ],
           ),

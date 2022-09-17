@@ -7,11 +7,12 @@ class Post {
   final String image;
   final String author;
   final String date;
-
-  Post({this.title, this.image, this.author, this.date});
+Post({required this.title,required this.author,required this.date,required this.image});
 }
 
 class HomePage extends StatelessWidget {
+  static const routeName='/home';
+  HomePage({Key? key}) : super(key: key);
   final data = [
     Post(
       image: 'assets/images/ikigai.jpg',
@@ -55,7 +56,7 @@ class HomePage extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Revamph Prompt',
           style: TextStyle(
             color: Colors.black,
@@ -64,9 +65,9 @@ class HomePage extends StatelessWidget {
           ),
         ),
         actions: [
-          InkWell(
+          const InkWell(
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/profile.jpg'),
+              backgroundImage:  AssetImage('assets/images/profile.jpg'),
             ),
           ),
           Padding(
@@ -77,12 +78,12 @@ class HomePage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Colors.grey[200],
-                    child: Icon(
+                    child: const Icon(
                       Icons.notifications_outlined,
                       color: Colors.grey,
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     top: 6,
                     right: 0,
                     child: CircleAvatar(
@@ -98,10 +99,10 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xFFFFD810),
+        backgroundColor: const Color(0xFFFFD810),
         elevation: 0,
         onPressed: () => null,
+        child: const Icon(Icons.add),
       ),
       body: SafeArea(
         minimum: const EdgeInsets.all(16),
@@ -113,11 +114,11 @@ class HomePage extends StatelessWidget {
                   hintText: 'Search for articles, author, and tags',
                   filled: true,
                   fillColor: Colors.grey[200],
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide.none,
                   ),
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                 ),
               ),
               const SizedBox(
@@ -127,7 +128,7 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Your feed',
                     style: TextStyle(
                       color: Colors.black,
@@ -139,27 +140,25 @@ class HomePage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    child: ListView.separated(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: data.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final post = data[index];
-                        return Card(
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: PostCellWidget(
-                                title: post.title,
-                                image: post.image,
-                                author: post.author,
-                                date: post.date,
-                                onClick: () => null),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) => Divider(),
-                    ),
+                  ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: data.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final post = data[index];
+                      return Card(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: PostCellWidget(
+                              title: post.title,
+                              image: post.image,
+                              author: post.author,
+                              date: post.date,
+                              onClick: () => null),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) => const Divider(),
                   ),
                   const SizedBox(
                     height: 20,

@@ -1,14 +1,26 @@
+import 'package:blog_minimal/models/user.dart';
 import 'package:blog_minimal/screens/home_page.dart';
-import 'package:blog_minimal/widgets/custom_text_field.dart';
+import 'package:blog_minimal/service/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
-class SignIn extends StatelessWidget {
-  const SignIn({Key key}) : super(key: key);
+import 'package:firebase_core/firebase_core.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+class SignIn extends StatefulWidget {
+  const SignIn({Key ?key}) : super(key: key);
 
   @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+
+var _password;
+  bool _isHidden = false;
+  bool showSpinner = false;
+  @override
   Widget build(BuildContext context) {
+    final userdata=Provider.of<UserPrimary>(context);
+    final AuthService authService = AuthService();
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
@@ -18,7 +30,7 @@ class SignIn extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Sign In',
           style: TextStyle(color: Colors.black),
         ),
@@ -29,34 +41,79 @@ class SignIn extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                     width: width,
                     child: Image.asset(
                       'assets/images/logo-png.png',
                       width: width * 0.5,
                       height: height * 0.3,
                     )),
-                Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(height: height * 0.01),
-                CustomTextField(hint: 'Enter Email'),
-                SizedBox(height: height * 0.03),
-                Text('Password', style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(height: height * 0.01),
-                CustomTextField(hint: 'Enter Password'),
-                SizedBox(height: height * 0.05),
+                 TextField(
+                decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.account_circle),
+                    suffixIcon: const Icon(Icons.create_rounded),
+                    border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor)),
+                    labelText: 'Email'),
+                        textInputAction: TextInputAction.next,
+                onChanged: (value) {
+                  setState(() {
+                     userdata.username=value;
+                  });
+                }),
+            Container(
+              padding: const EdgeInsets.all(5),
+            ),
+            TextField(
+                obscureText: !_isHidden,
+                decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.security),
+                    suffixIcon: IconButton(
+                        icon: Icon(
+                          _isHidden ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isHidden = !_isHidden;
+                          });
+                        }),
+                    border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor)),
+                    labelText: 'Password'),
+                        textInputAction: TextInputAction.next,
+                onChanged: (value) {
+                 setState(() {
+                   _password=value;
+                 });
+                }),
+                       const Padding(padding: EdgeInsets.all(5)),
                 Center(
-                  child: Container(
+                  child: SizedBox(
                       width: width * 0.5,
                       height: height * 0.06,
                       child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all(Color(0xff11586b))),
-                          onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage())),
-                          child: Text("Sign-In"))),
+                                  MaterialStateProperty.all(const Color(0xff11586b))),
+                           onPressed: () async {
+                                    dynamic result = await authService.signInAnon(
+                              userdata.username.toString(),_password.toString());
+                          if (result == null) {
+                            // ignore: avoid_print
+                            Fluttertoast.showToast(
+                              msg: ' Error Cannot log in  !!! ',
+                            );
+                          } else {
+                                Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  HomePage()),
+                          );
+                          }
+                          },
+                          child: const Text("Sign-In"))),
                 )
               ],
             ),
